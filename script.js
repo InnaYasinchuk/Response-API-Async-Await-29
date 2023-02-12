@@ -2,6 +2,8 @@
 
 //1
 
+const url = "https://jsonplaceholder.typicode.com/todos";
+
 function getData(url) {
   let result = fetch(url);
   const titles = [];
@@ -34,22 +36,17 @@ async function getData(url) {
   console.log(titles);
 }
 
-getData("https://jsonplaceholder.typicode.com/todos");
-
 //3
 
-const url = "https://jsonplaceholder.typicode.com/todos";
 const divA = document.querySelector(".user-a");
 const divAB = document.querySelector(".user-ab");
 
 async function getData(url) {
   let result = await fetch(url);
   let data = await result.json();
-  let divA = document.querySelector(".user-a");
-  let divAB = document.querySelector(".user-ab");
   divA.classList.add("active");
   divAB.classList.add("active");
-      
+
   for (let item of data) {
     if (item.title[0] === "a") {
       let titleA = JSON.stringify(item) + "<br>";
@@ -72,51 +69,33 @@ async function getData(url) {
   return data;
 }
 
-function showA() {
+async function showA() {
   divA.innerHTML = "";
   divA.classList.add("active");
   divAB.classList.remove("active");
 
-  getData(url);
-  let result = fetch(url);
+  const result = await getData(url);
+
   result
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      data
-        .filter((data) => data.title[0] === "a")
-        .forEach((data) => {
-          divA.innerHTML += JSON.stringify(data) + "<br>";
-        });
+    .filter((data) => data.title[0] === "a")
+    .forEach((data) => {
+      divA.innerHTML += JSON.stringify(data) + "<br>";
     });
 }
 
-let btnA = document.querySelector(".add-a");
-btnA.addEventListener("click", showA);
-
-function showAB() {
+async function showAB() {
   divAB.innerHTML = "";
   divAB.classList.add("active");
   divA.classList.remove("active");
 
-  getData(url);
-  let result = fetch(url);
+  const result = await getData(url);
+
   result
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      data
-        .filter((data) => data.title[0] === "a" && data.title[1] === "b")
-        .forEach((data) => {
-          divAB.innerHTML += JSON.stringify(data) + "<br>";
-        });
+    .filter((data) => data.title[0] === "a" && data.title[1] === "b")
+    .forEach((data) => {
+      divAB.innerHTML += JSON.stringify(data) + "<br>";
     });
 }
-
-let btnAB = document.querySelector(".add-ab");
-btnAB.addEventListener("click", showAB);
 
 function showAll() {
   showA();
@@ -125,8 +104,20 @@ function showAll() {
   divAB.classList.add("active");
 }
 
+
+let btnA = document.querySelector(".add-a");
+btnA.addEventListener("click", showA);
+
+let btnAB = document.querySelector(".add-ab");
+btnAB.addEventListener("click", showAB);
+
 let btnAll = document.querySelector(".add-all");
 btnAll.addEventListener("click", showAll);
+
+
+
+
+
 
 
 
